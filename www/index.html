@@ -97,7 +97,7 @@ button:focus-visible{outline:3px solid var(--good);outline-offset:2px}
 <script>
 const W=360,H=640,c=document.getElementById('c'),x=c.getContext('2d');x.scale(2,2);
 const $=id=>document.getElementById(id);
-const GAP=140,R=11,CPN=10,MAXADS=2,FLAGGEM=5,FALLS=3,SKIP=50;
+const GAP=140,R=11,HR=8,CPN=10,MAXADS=2,FLAGGEM=5,FALLS=3,SKIP=50;
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const SKINS=[
  {id:'kirec',name:'Kireç',price:0,col:null},
@@ -116,12 +116,12 @@ function dayKey(){const d=new Date();return d.getFullYear()*10000+(d.getMonth()+
 if(S.daily.d!==dayKey())S.daily={d:dayKey(),m:0};
 
 /* ---- durum ---- */
-let p={x:W/2,y:0,vx:115,vy:0},base=0,cpCount=0,cpY=0,mode='menu',gm='classic',seed=0,t=0,msg=0,msgTxt='',msgSub='',
+let p={x:W/2,y:0,vx:100,vy:0},base=0,cpCount=0,cpY=0,mode='menu',gm='classic',seed=0,t=0,msg=0,msgTxt='',msgSub='',
     camY=-420,last=0,got=new Set(),run={gems:0,max:0,ads:MAXADS,rec:false},parts=[],trail=[],shake=0,dyT=0,squash=0,frame=0,col={};
 const rn=(i,k)=>{let s=Math.sin(i*127.1+k*311.7+seed*74.7)*43758.5453;return s-Math.floor(s)};
 const rowY=i=>-300-i*GAP;
 const isCp=i=>i%CPN===CPN-1;
-const df=i=>1+Math.min(i,120)/120*.8;
+const df=i=>1+Math.min(i,160)/160*.6;
 const curBest=()=>gm==='daily'?S.daily.m:S.best;
 
 /* ---- engeller ---- */
@@ -130,21 +130,21 @@ function typeOf(i){if(isCp(i))return'cp';
  if(z>0&&z<4&&i%CPN===0)return pool[z];
  return pool[Math.floor(rn(i,31)*pool.length)]}
 function obs(i){const ty=typeOf(i),y=rowY(i),a=[];
- if(ty==='bar'){const n=i>5?2:1;
-  for(let k=0;k<n;k++){const w=70+rn(i,k)*40,sp=(Math.min(50+i*4,170)+Math.min(Math.max(0,i-30),60))*(.8+rn(i,k+5)*.4),span=W-w,u=(rn(i,k+9)*2*span+sp*t)%(2*span);
+ if(ty==='bar'){const n=i>14?2:1;
+  for(let k=0;k<n;k++){const w=70+rn(i,k)*40,sp=(Math.min(34+i*2.6,150)+Math.min(Math.max(0,i-45),60))*(.8+rn(i,k+5)*.4),span=W-w,u=(rn(i,k+9)*2*span+sp*t)%(2*span);
    a.push({k:'r',x:u<span?u:2*span-u,y:y-8,w,h:16})}}
- else if(ty==='gate'){const g=Math.max(86,124-i*.5),amp=(W-g)/2-14,om=(.7+rn(i,2)*.5)*df(i),cx=W/2+Math.sin(t*om+rn(i,3)*6.28)*amp;
+ else if(ty==='gate'){const g=Math.max(100,150-i*.5),amp=(W-g)/2-14,om=(.5+rn(i,2)*.4)*df(i),cx=W/2+Math.sin(t*om+rn(i,3)*6.28)*amp;
   a.push({k:'r',x:-20,y:y-8,w:cx-g/2+20,h:16},{k:'r',x:cx+g/2,y:y-8,w:W-cx-g/2+20,h:16})}
- else if(ty==='spin'){a.push({k:'s',cx:100+rn(i,4)*160,cy:y,L:55,a:t*(1.3+rn(i,5)*.7)*df(i)*(rn(i,6)<.5?-1:1)+rn(i,7)*6.28})}
- else if(ty==='blink'){const per=2.4/Math.min(df(i),1.4),ph=(t+rn(i,8)*per)%per,on=ph<per*.5,side=Math.floor(rn(i,9)*3),w=230;
+ else if(ty==='spin'){a.push({k:'s',cx:100+rn(i,4)*160,cy:y,L:48,a:t*(1+rn(i,5)*.5)*df(i)*(rn(i,6)<.5?-1:1)+rn(i,7)*6.28})}
+ else if(ty==='blink'){const per=2.8/Math.min(df(i),1.3),ph=(t+rn(i,8)*per)%per,on=ph<per*.5,side=Math.floor(rn(i,9)*3),w=200;
   a.push({k:'r',x:side===0?0:side===1?W-w:(W-w)/2,y:y-8,w,h:16,off:!on,warn:ph>per-.4})}
  return a}
 function hit(b){
  if(b.k==='s'){const dx=Math.cos(b.a)*b.L,dy=Math.sin(b.a)*b.L,ax=b.cx-dx,ay=b.cy-dy,
    u=Math.max(0,Math.min(1,((p.x-ax)*2*dx+(p.y-ay)*2*dy)/(4*b.L*b.L))),qx=ax+2*dx*u,qy=ay+2*dy*u;
-  return (p.x-qx)**2+(p.y-qy)**2<(R+5)**2}
+  return (p.x-qx)**2+(p.y-qy)**2<(HR+4)**2}
  if(b.off)return false;
- const nx=Math.max(b.x,Math.min(p.x,b.x+b.w)),ny=Math.max(b.y,Math.min(p.y,b.y+b.h));return (p.x-nx)**2+(p.y-ny)**2<R*R}
+ const nx=Math.max(b.x,Math.min(p.x,b.x+b.w)),ny=Math.max(b.y,Math.min(p.y,b.y+b.h));return (p.x-nx)**2+(p.y-ny)**2<HR*HR}
 const gemPos=i=>({x:40+rn(i,20)*(W-80),y:rowY(i)-GAP/2});
 
 /* ---- ses ---- */
@@ -166,9 +166,9 @@ function show(id){for(const k of['menu','over','shop','brk'])$(k).classList.togg
 function refreshMenu(){$('mstat').textContent='En iyi '+S.best+' m  ·  '+S.gems+' elmas';
  $('dstat').textContent=S.daily.m?'Bugün en iyi '+S.daily.m+' m':'Her gün yeni bir kule';
  $('bSnd').textContent='Ses: '+(S.mute?'kapalı':'açık')}
-function spawn(){p={x:W/2,y:base,vx:115,vy:0};mode='play';show(null);t=0;camY=p.y-420;trail=[]}
+function spawn(){p={x:W/2,y:base,vx:100,vy:0};mode='play';show(null);t=0;camY=p.y-420;trail=[]}
 function newRun(m){gm=m;seed=m==='daily'?dayKey()%997+1:0;cpCount=0;cpY=0;base=0;got=new Set();run={gems:0,max:0,ads:MAXADS,rec:false};parts=[];spawn()}
-function goMenu(){mode='menu';gm='classic';seed=0;base=0;cpCount=0;cpY=0;got=new Set();p={x:W/2,y:0,vx:115,vy:0};t=0;camY=-420;refreshMenu();show('menu')}
+function goMenu(){mode='menu';gm='classic';seed=0;base=0;cpCount=0;cpY=0;got=new Set();p={x:W/2,y:0,vx:100,vy:0};t=0;camY=-420;refreshMenu();show('menu')}
 function jump(){if(mode!=='play')return;p.vy=-380;squash=.12;sJump();if(!RM)for(let k=0;k<4;k++)parts.push({x:p.x,y:p.y+R,vx:(Math.random()-.5)*80,vy:40+Math.random()*60,l:.25,m:.25,c:col.fg,s:2})}
 addEventListener('pointerdown',e=>{if(!e.target.closest('button'))jump()});
 addEventListener('keydown',e=>{if(e.code==='Space'&&mode==='play'){e.preventDefault();jump()}});
