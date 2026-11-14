@@ -21,7 +21,7 @@ Tek dokunuşla tırmanış oyunu. Oyun `www/index.html` içinde; Capacitor onu b
 
 ## Mağazaya çıkmadan önce yapılacaklar
 - **Reklamlar hâlâ demo.** Oyundaki "Reklam (demo)" ekranı 3 saniye bekletir, gerçek reklam göstermez ve para kazandırmaz. Gerçek reklam için AdMob hesabı ve reklam kimlikleri gerekir.
-- **Paket adı:** `com.tapscend.game`. Yayından sonra değiştirilemez; kendi alan adınız varsa şimdi değiştirin (`capacitor.config.ts` ve `android/app/build.gradle`).
+- **Paket adı:** `com.tapscend.game`. Yayından sonra değiştirilemez; kendi alan adınız varsa şimdi değiştirin (`capacitor.config.json` ve `android/app/build.gradle`).
 - **İmzalı sürüm:** Mağaza debug APK kabul etmez; imzalı AAB gerekir (Android Studio > Build > Generate Signed App Bundle). İmza anahtarını kaybetmeyin.
 - **Google Play geliştirici hesabı** (tek seferlik 25 $) ve mağaza sayfası: açıklama, ekran görüntüleri, gizlilik politikası bağlantısı, içerik derecelendirme anketi.
 - Mağaza simgesi: `assets/play-store-icon-512.png`.
